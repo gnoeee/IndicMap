@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual Maps (Demo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.unpkg.com/olamaps-web-sdk@latest/dist/olamaps-web-sdk.umd.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div id="controls" class="p-3 bg-white shadow-xl flex flex-col md:flex-row items-center justify-between h-auto md:h-18">
+        <h1 class="text-2xl font-extrabold text-gray-800 mb-3 md:mb-0">Multilingual Map Demo</h1>
+        <div class="flex items-center space-x-2">
+            
+            <label for="language-select" class="text-gray-700 font-semibold whitespace-nowrap text-sm">Select Language:</label>
+            <select id="language-select" 
+                    class="p-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                <option value="">English (Default)</option>
+                <option value="-ml">Malayalam (ml)</option>
+                <option value="-hi">Hindi (hi)</option>
+                <option value="-ta">Tamil (ta)</option>
+                <option value="-bn">Bengali (bn)</option>
+                <option value="-mr">Marathi (mr)</option>
+                <option value="-kn">Kannada (kn)</option>
+                <option value="-te">Telugu (te)</option>
+                <option value="-or">Odia (or)</option>
+                <option value="-sa">Sanskrit (sa)</option>
+                <option value="-gu">Gujarati (gu)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="map-container-grid">
+        <div id="map"></div>
+        
+        <div id="layer-control-panel">
+            <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Map Layer Styles</h3>
+            <div id="layer-list" class="space-y-1 text-sm">
+                <p class="text-gray-500">Loading layers...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
