@@ -1,4 +1,4 @@
-const OLA_API_KEY = "e0fSRVJPLSC86zNFyPrIlBBY8wkleXtx03EDReYS"; 
+const OLA_API_KEY = "e0fSRVJPLSC86zNFyPrIlBBY8wkleXtx03EDReYS";
 const MAP_CONTAINER_ID = 'map';
 const LAYER_LIST_ID = 'layer-list'; // ID for the list container inside the panel
 const LIGHT_STYLE_BASE = "https://api.olamaps.io/tiles/vector/v1/styles/default-light-standard";
@@ -7,7 +7,7 @@ const STYLE_JSON_URL = `${LIGHT_STYLE_BASE}/style.json?api_key=${OLA_API_KEY}`;
 let mapInstance = null;
 let olaMaps = null;
 
-const DEFAULT_CENTER = [77.6045, 12.9716]; 
+const DEFAULT_CENTER = [77.6045, 12.9716];
 const DEFAULT_ZOOM = 12; // Slightly increased zoom for better first impression
 
 /**
@@ -16,7 +16,7 @@ const DEFAULT_ZOOM = 12; // Slightly increased zoom for better first impression
 function colorToHex(color) {
     if (typeof color !== 'string') return '#000000';
     if (color.startsWith('#')) return color.substring(0, 7);
-    
+
     const match = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d\.]+))?\)$/);
     if (match) {
         let hex = '#';
@@ -34,12 +34,12 @@ function colorToHex(color) {
  */
 function populateLayerControl(layers) {
     const layerList = document.getElementById(LAYER_LIST_ID);
-    layerList.innerHTML = ''; 
+    layerList.innerHTML = '';
 
     const customizableTypes = ['fill', 'line'];
     const colorProperties = { 'fill': 'fill-color', 'line': 'line-color', 'background': 'background-color' };
 
-    const displayLayers = layers.filter(layer => 
+    const displayLayers = layers.filter(layer =>
         (customizableTypes.includes(layer.type) || layer.id === 'background') &&
         !Object.values(layer.paint).some(prop => typeof prop === 'object' && (prop.stops || prop.match))
     );
@@ -48,14 +48,14 @@ function populateLayerControl(layers) {
         const layerId = layer.id;
         const layerType = layer.type;
         const colorProp = colorProperties[layerType];
-        if (!colorProp) return; 
+        if (!colorProp) return;
 
         const isVisible = (layer.layout && layer.layout.visibility === 'none') ? false : true;
         const initialColor = layer.paint[colorProp] ? colorToHex(layer.paint[colorProp]) : '#333333';
-        
+
         const item = document.createElement('div');
         item.className = 'flex items-center justify-between py-2 border-b border-gray-100 last:border-0 hover:bg-white/50 px-2 rounded transition-colors';
-        
+
         item.innerHTML = `
             <div class="flex items-center space-x-3 overflow-hidden">
                 <input type="checkbox" data-layer-id="${layerId}" data-action="visibility" ${isVisible ? 'checked' : ''}
@@ -93,27 +93,27 @@ function populateLayerControl(layers) {
  */
 function initializeMap(langCode = "") {
     const styleURL = `${LIGHT_STYLE_BASE}${langCode}/style.json?api_key=${OLA_API_KEY}`;
-    
+
     let currentCenter = DEFAULT_CENTER;
-    let currentZoom = DEFAULT_ZOOM;                    
-    
+    let currentZoom = DEFAULT_ZOOM;
+
     if (mapInstance) {
         currentCenter = mapInstance.getCenter().toArray();
         currentZoom = mapInstance.getZoom();
-        mapInstance.remove(); 
+        mapInstance.remove();
         mapInstance = null;
         document.getElementById(MAP_CONTAINER_ID).innerHTML = '';
     } else if (!olaMaps) {
         olaMaps = new OlaMaps({ apiKey: OLA_API_KEY });
     }
-	
+
     try {
         mapInstance = olaMaps.init({
             style: styleURL,
             container: MAP_CONTAINER_ID,
             center: currentCenter,
             zoom: currentZoom,
-            attributionControl: false // We'll add custom attribution if needed or stick to default location
+            attributionControl: true, // Re-enabled for proper attribution
         });
 
         // Add standard navigation controls (compass only) to a clean position if desired, 
@@ -164,11 +164,11 @@ function setupUIHandlers() {
 
     // 2. Zoom Controls
     document.getElementById('zoom-in').addEventListener('click', () => {
-        if(mapInstance) mapInstance.zoomIn();
+        if (mapInstance) mapInstance.zoomIn();
     });
 
     document.getElementById('zoom-out').addEventListener('click', () => {
-        if(mapInstance) mapInstance.zoomOut();
+        if (mapInstance) mapInstance.zoomOut();
     });
 
     // 3. Current Location
@@ -190,7 +190,7 @@ function setupUIHandlers() {
                         zoom: 14,
                         essential: true
                     });
-                    
+
                     // Add a marker
                     // Note: OlaMaps SDK might behave differently for markers, standard MapLibre syntax:
                     // new olaMaps.Marker().setLngLat([longitude, latitude]).addTo(mapInstance);
